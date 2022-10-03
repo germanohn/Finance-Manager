@@ -19,6 +19,15 @@ public class Despesa {
 	private float valor;
 	private LocalDateTime date = LocalDateTime.now();
 
+	public Despesa() {
+		
+	}
+	
+	public Despesa(String descricao, float valor) {
+		this.descricao = descricao;
+		this.valor = valor;
+	}
+
 	public Integer getId() {
 		return id;
 	}

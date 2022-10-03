@@ -20,30 +20,18 @@ public class DespesaDto {
 		this.date = despesa.getDate();
 	}
 	
-	/**
-	 * @return the id
-	 */
 	public int getId() {
 		return id;
 	}
-	
-	/**
-	 * @return the descricao
-	 */
+
 	public String getDescricao() {
 		return descricao;
 	}
-	
-	/**
-	 * @return the valor
-	 */
+
 	public float getValor() {
 		return valor;
 	}
-	
-	/**
-	 * @return the date
-	 */
+
 	public LocalDateTime getDate() {
 		return date;
 	}
@@ -51,5 +39,4 @@ public class DespesaDto {
 	public static List<DespesaDto> convert(List<Despesa> despesas) {
 		return despesas.stream().map(DespesaDto::new).collect(Collectors.toList());
 	}
-	
 }
