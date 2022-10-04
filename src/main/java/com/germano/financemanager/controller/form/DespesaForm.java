@@ -1,11 +1,16 @@
 package com.germano.financemanager.controller.form;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import com.germano.financemanager.model.Despesa;
 
 public class DespesaForm {
 
+	@NotNull
 	private String descricao;
-	private float valor;
+	@NotNull
+	private Float valor;
 
 	public String getDescricao() {
 		return descricao;
@@ -15,11 +20,11 @@ public class DespesaForm {
 		this.descricao = descricao;
 	}
 
-	public float getValor() {
+	public Float getValor() {
 		return valor;
 	}
 
-	public void setValor(float valor) {
+	public void setValor(Float valor) {
 		this.valor = valor;
 	}
 	

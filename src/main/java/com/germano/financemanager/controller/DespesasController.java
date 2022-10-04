@@ -3,6 +3,8 @@ package com.germano.financemanager.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +41,7 @@ public class DespesasController {
 	}
 	
 	@PostMapping("/despesas")
-	public ResponseEntity<DespesaDto> post(@RequestBody DespesaForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<DespesaDto> post(@RequestBody @Valid DespesaForm form, UriComponentsBuilder uriBuilder) {
 		Despesa despesa = form.convert();
 		despesaRepository.save(despesa); 
 		
