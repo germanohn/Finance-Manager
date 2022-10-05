@@ -1,9 +1,12 @@
 package com.germano.financemanager.controller.form;
 
-import javax.validation.constraints.NotEmpty;
+import java.util.Optional;
+
 import javax.validation.constraints.NotNull;
 
+import com.germano.financemanager.exceptions.EntityNotFoundException;
 import com.germano.financemanager.model.Despesa;
+import com.germano.financemanager.repository.DespesaRepository;
 
 public class DespesaForm {
 
@@ -31,5 +34,15 @@ public class DespesaForm {
 	public Despesa convert() {
 		// TODO Auto-generated method stub
 		return new Despesa(this.descricao, this.valor);
+	}
+
+	public Despesa update(Integer id, DespesaRepository despesaRepository) {
+		Despesa despesa = despesaRepository.findById(id).orElseThrow(
+				EntityNotFoundException::new);
+		
+		despesa.setDescricao(this.descricao);
+		despesa.setValor(this.valor);
+		
+		return despesa;
 	}
 }

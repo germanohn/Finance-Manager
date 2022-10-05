@@ -20,7 +20,6 @@ public class Despesa {
 	private LocalDateTime date = LocalDateTime.now();
 
 	public Despesa() {
-		
 	}
 	
 	public Despesa(String descricao, float valor) {
@@ -36,11 +35,19 @@ public class Despesa {
 		return descricao;
 	}
 
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	public float getValor() {
 		return valor;
 	}
 
+	public void setValor(float valor) {
+		this.valor = valor;
+	}
+
 	public LocalDateTime getDate() {
 		return date;
-	}	
+	}
 }
