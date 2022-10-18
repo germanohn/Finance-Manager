@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "despesas")
@@ -17,7 +18,7 @@ public class Despesa {
 	private Integer id;
 	private String descricao;
 	private float valor;
-	private LocalDateTime date = LocalDateTime.now();
+	private LocalDateTime data = LocalDateTime.now();
 
 	public Despesa() {
 	}
@@ -25,6 +26,12 @@ public class Despesa {
 	public Despesa(String descricao, float valor) {
 		this.descricao = descricao;
 		this.valor = valor;
+	}
+
+	public Despesa(String descricao, Float valor, LocalDateTime data) {
+		this.descricao = descricao;
+		this.valor = valor;
+		this.data = data;
 	}
 
 	public Integer getId() {
@@ -47,7 +54,7 @@ public class Despesa {
 		this.valor = valor;
 	}
 
-	public LocalDateTime getDate() {
-		return date;
+	public LocalDateTime getData() {
+		return data;
 	}
 }

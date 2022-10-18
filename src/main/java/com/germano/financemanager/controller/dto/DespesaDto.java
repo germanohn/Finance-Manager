@@ -11,13 +11,13 @@ public class DespesaDto {
 	private int id;
 	private String descricao;
 	private float valor;
-	private LocalDateTime date = LocalDateTime.now();
+	private LocalDateTime data = LocalDateTime.now();
 	
 	public DespesaDto(Despesa despesa) {
 		this.id = despesa.getId();
 		this.descricao = despesa.getDescricao();
 		this.valor = despesa.getValor();
-		this.date = despesa.getDate();
+		this.data = despesa.getData();
 	}
 	
 	public int getId() {
@@ -32,8 +32,8 @@ public class DespesaDto {
 		return valor;
 	}
 
-	public LocalDateTime getDate() {
-		return date;
+	public LocalDateTime getData() {
+		return data;
 	}
 	
 	public static List<DespesaDto> convert(List<Despesa> despesas) {

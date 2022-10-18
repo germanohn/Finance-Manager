@@ -1,12 +1,16 @@
 package com.germano.financemanager.controller;
 
 import java.net.URI;
+import java.time.Month;
 import java.util.List;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,27 +40,56 @@ public class DespesasController {
 	}
 	
 	@GetMapping("/{id}")
-	public DespesaDto getDespesaById(@PathVariable Integer id) {
+	public ResponseEntity<DespesaDto> getDespesaById(@PathVariable Integer id) {
 		Despesa despesa = despesaRepository.findById(id).
-				orElseThrow(() -> new EntityNotFoundException("Despesa " + id + " não encontrada."));
+				orElseThrow(() -> new EntityNotFoundException());
 		
-		return new DespesaDto(despesa);
+		return ResponseEntity.ok(new DespesaDto(despesa));
 	}
 	
 	@PostMapping
+	@Transactional
 	public ResponseEntity<DespesaDto> post(@RequestBody @Valid DespesaForm form, UriComponentsBuilder uriBuilder) {
 		Despesa despesa = form.convert();
-		despesaRepository.save(despesa); 
 		
-		URI uri = uriBuilder.path("/despesas/{id}").buildAndExpand(despesa.getId()).toUri();
-		return ResponseEntity.created(uri).body(new DespesaDto(despesa));
+		List<Despesa> despesas = despesaRepository.findByDescricao(despesa.getDescricao());
+		
+		Month month = despesa.getData().getMonth();
+		boolean monthIsPresent = false;
+		for (int i = 0; !monthIsPresent && i < despesas.size(); i++) {
+			monthIsPresent = (month == despesas.get(i).getData().getMonth()); 
+		}
+		
+		if (!monthIsPresent) {
+			despesaRepository.save(despesa); 
+			
+			URI uri = uriBuilder.path("/despesas/{id}").buildAndExpand(despesa.getId()).toUri();
+			return ResponseEntity.created(uri).body(new DespesaDto(despesa));
+		}
+		
+		return ResponseEntity.status(HttpStatus.CONFLICT).build();
 	}
 	
-	/*
 	@PutMapping("/{id}")
+	@Transactional
 	public ResponseEntity<DespesaDto> put(@PathVariable Integer id, @RequestBody @Valid DespesaForm form) {
-		Despesa despesa = form.update(id, despesaRepository);
+		Despesa despesa = despesaRepository.findById(id).
+				orElseThrow(() -> new EntityNotFoundException());
 		
+		despesa = form.update(id, despesaRepository);
+			
+		return ResponseEntity.ok(new DespesaDto(despesa));
+	}
+	
+	@DeleteMapping("/{id}")
+	@Transactional
+	public ResponseEntity<?> delete(@PathVariable Integer id) {
+		if (!despesaRepository.existsById(id)) {
+			throw new EntityNotFoundException();
+		}
 		
-	}*/
+		despesaRepository.deleteById(id);
+		
+		return ResponseEntity.ok().build(); 
+	}
 }

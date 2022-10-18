@@ -17,6 +17,6 @@ public class Receita {
 	private Integer id;
 	private String descricao;
 	private float valor;
-	private LocalDateTime date = LocalDateTime.now();
+	private LocalDateTime data = LocalDateTime.now();
 	
 }
