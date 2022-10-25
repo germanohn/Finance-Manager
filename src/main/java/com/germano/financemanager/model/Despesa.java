@@ -1,6 +1,6 @@
 package com.germano.financemanager.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,17 +18,18 @@ public class Despesa {
 	private Integer id;
 	private String descricao;
 	private float valor;
-	private LocalDateTime data = LocalDateTime.now();
+	private LocalDate data = LocalDate.now();
 
 	public Despesa() {
 	}
 	
 	public Despesa(String descricao, float valor) {
+		this();
 		this.descricao = descricao;
 		this.valor = valor;
 	}
 
-	public Despesa(String descricao, Float valor, LocalDateTime data) {
+	public Despesa(String descricao, Float valor, LocalDate data) {
 		this.descricao = descricao;
 		this.valor = valor;
 		this.data = data;
@@ -54,7 +55,11 @@ public class Despesa {
 		this.valor = valor;
 	}
 
-	public LocalDateTime getData() {
+	public LocalDate getData() {
 		return data;
+	}
+
+	public void setData(LocalDate data) {
+		this.data = data;
 	}
 }

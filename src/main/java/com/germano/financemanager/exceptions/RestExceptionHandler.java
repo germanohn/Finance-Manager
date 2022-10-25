@@ -3,6 +3,7 @@ package com.germano.financemanager.exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -30,6 +31,18 @@ public class RestExceptionHandler {
 		});
 		
 		return errorsDto;
+	}
+	
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<Object> handleDataIntegrityViolation(
+			DataIntegrityViolationException exc) {
+		
+		ErrorResponse error = new ErrorResponse(
+				exc.getLocalizedMessage(), 
+				HttpStatus.CONFLICT
+		);
+		
+		return new ResponseEntity<>(error.getMessage(), error.getStatus());
 	}
 	
 	@ExceptionHandler(EntityNotFoundException.class)

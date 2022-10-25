@@ -1,7 +1,6 @@
 package com.germano.financemanager.controller;
 
 import java.net.URI;
-import java.time.Month;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -25,6 +24,7 @@ import com.germano.financemanager.controller.form.DespesaForm;
 import com.germano.financemanager.exceptions.EntityNotFoundException;
 import com.germano.financemanager.model.Despesa;
 import com.germano.financemanager.repository.DespesaRepository;
+import com.germano.financemanager.utils.Utils;
 
 @RestController
 @RequestMapping("/despesas")
@@ -34,13 +34,13 @@ public class DespesasController {
 	private DespesaRepository despesaRepository;
 	
 	@GetMapping
-	public List<DespesaDto> getDespesas() {
+	public List<DespesaDto> findAll() {
 		List<Despesa> despesas = despesaRepository.findAll();
 		return DespesaDto.convert(despesas);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<DespesaDto> getDespesaById(@PathVariable Integer id) {
+	public ResponseEntity<DespesaDto> findById(@PathVariable Integer id) {
 		Despesa despesa = despesaRepository.findById(id).
 				orElseThrow(() -> new EntityNotFoundException());
 		
@@ -52,15 +52,7 @@ public class DespesasController {
 	public ResponseEntity<DespesaDto> post(@RequestBody @Valid DespesaForm form, UriComponentsBuilder uriBuilder) {
 		Despesa despesa = form.convert();
 		
-		List<Despesa> despesas = despesaRepository.findByDescricao(despesa.getDescricao());
-		
-		Month month = despesa.getData().getMonth();
-		boolean monthIsPresent = false;
-		for (int i = 0; !monthIsPresent && i < despesas.size(); i++) {
-			monthIsPresent = (month == despesas.get(i).getData().getMonth()); 
-		}
-		
-		if (!monthIsPresent) {
+		if (Utils.findDespesaByDescricaoAndMonth(despesa, despesaRepository) == -1) {
 			despesaRepository.save(despesa); 
 			
 			URI uri = uriBuilder.path("/despesas/{id}").buildAndExpand(despesa.getId()).toUri();
@@ -73,10 +65,7 @@ public class DespesasController {
 	@PutMapping("/{id}")
 	@Transactional
 	public ResponseEntity<DespesaDto> put(@PathVariable Integer id, @RequestBody @Valid DespesaForm form) {
-		Despesa despesa = despesaRepository.findById(id).
-				orElseThrow(() -> new EntityNotFoundException());
-		
-		despesa = form.update(id, despesaRepository);
+		Despesa despesa = form.update(id, despesaRepository);
 			
 		return ResponseEntity.ok(new DespesaDto(despesa));
 	}

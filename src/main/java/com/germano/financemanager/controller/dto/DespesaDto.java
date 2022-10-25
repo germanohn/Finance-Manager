@@ -1,6 +1,6 @@
 package com.germano.financemanager.controller.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,7 +11,7 @@ public class DespesaDto {
 	private int id;
 	private String descricao;
 	private float valor;
-	private LocalDateTime data = LocalDateTime.now();
+	private LocalDate data = LocalDate.now();
 	
 	public DespesaDto(Despesa despesa) {
 		this.id = despesa.getId();
@@ -32,7 +32,7 @@ public class DespesaDto {
 		return valor;
 	}
 
-	public LocalDateTime getData() {
+	public LocalDate getData() {
 		return data;
 	}
 	
