@@ -1,6 +1,7 @@
 package com.germano.financemanager.controller.form;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
@@ -64,6 +65,39 @@ public class DespesaForm {
 		
 		Despesa newDespesaOfId = this.convert();
 		
+		Optional<Integer> despesaIdWithSameDescricaoAndMonth = 
+				Utils.findDespesaIdByDescricaoAndMonth(
+						newDespesaOfId,
+						despesaRepository); 
+		
+		if (despesaIdWithSameDescricaoAndMonth.isEmpty() || 
+				despesaIdWithSameDescricaoAndMonth.get() == id) {
+			currentDespesaOfId.setDescricao(newDespesaOfId.getDescricao());
+			currentDespesaOfId.setValor(newDespesaOfId.getValor());
+			currentDespesaOfId.setData(newDespesaOfId.getData());
+		} else {
+			throw new DataIntegrityViolationException(
+					"there exists another despesa with same descricao and month");
+		}
+		
+		return currentDespesaOfId;
+	}
+	
+	/**
+	 * Update despesa of id {id} with this.convert(). It does not update
+	 * the corresponding despesa
+	 * 
+	 * @param id
+	 * @param despesaRepository
+	 * @return  
+	 */
+	/*
+	public Despesa update(Integer id, DespesaRepository despesaRepository) {
+		Despesa currentDespesaOfId = despesaRepository.findById(id).orElseThrow(
+				EntityNotFoundException::new);
+		
+		Despesa newDespesaOfId = this.convert();
+		
 		int idDespesaWithSameDescricaoAndMonth = Utils.
 				findDespesaByDescricaoAndMonth(newDespesaOfId, despesaRepository);
 				
@@ -78,5 +112,5 @@ public class DespesaForm {
 		}
 		
 		return currentDespesaOfId;
-	}
+	}*/
 }

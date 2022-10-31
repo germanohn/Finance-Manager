@@ -51,8 +51,8 @@ public class DespesasController {
 	@Transactional
 	public ResponseEntity<DespesaDto> post(@RequestBody @Valid DespesaForm form, UriComponentsBuilder uriBuilder) {
 		Despesa despesa = form.convert();
-		
-		if (Utils.findDespesaByDescricaoAndMonth(despesa, despesaRepository) == -1) {
+
+		if (!Utils.existsDespesaByDescricaoAndMonth(despesa, despesaRepository)) {
 			despesaRepository.save(despesa); 
 			
 			URI uri = uriBuilder.path("/despesas/{id}").buildAndExpand(despesa.getId()).toUri();

@@ -1,4 +1,4 @@
-package com.germano.financemanager.model;
+	package com.germano.financemanager.model;
 
 import java.time.LocalDate;
 
@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "despesas")
@@ -38,7 +37,7 @@ public class Despesa {
 	public Integer getId() {
 		return id;
 	}
-
+	
 	public String getDescricao() {
 		return descricao;
 	}

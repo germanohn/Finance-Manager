@@ -1,33 +1,41 @@
 package com.germano.financemanager.utils;
 
-import java.time.Month;
-import java.time.Year;
 import java.util.List;
+import java.util.Optional;
 
 import com.germano.financemanager.model.Despesa;
+import com.germano.financemanager.model.Receita;
 import com.germano.financemanager.repository.DespesaRepository;
+import com.germano.financemanager.repository.ReceitaRepository;
 
 public class Utils {
 	
-	/*
-	 * Rule: a despesa is present if there is already an entry in the 
-	 * db with same descricao and month.
-	 */
-	public static int findDespesaByDescricaoAndMonth(Despesa despesa, DespesaRepository despesaRepository) {
-		List<Despesa> despesas = despesaRepository.findByDescricao(despesa.getDescricao());
+	public static Optional<Integer> findDespesaIdByDescricaoAndMonth(
+			Despesa despesa, DespesaRepository repository) {
+		List<Despesa> despesas = repository.findByDescricaoAndMonth(
+				despesa.getDescricao(), 
+				despesa.getData().getYear(),
+				despesa.getData().getMonthValue()); 
 		
-		int despesaId = -1;
-		int year = despesa.getData().getYear();
-		Month month = despesa.getData().getMonth();
-		for (int i = 0; despesaId == -1 && i < despesas.size(); i++) {
-			Despesa despesaI = despesas.get(i);
-			if (year == despesaI.getData().getYear() && 
-					month == despesaI.getData().getMonth()) {
-				despesaId = despesaI.getId();
-			}
+		Optional<Integer> despesaId;
+		
+		if (!despesas.isEmpty()) {
+			despesaId = Optional.of(despesas.get(0).getId());
+		} else {
+			despesaId = Optional.empty();
 		}
-		
+			
 		return despesaId;
+	}
+
+	public static boolean existsDespesaByDescricaoAndMonth(Despesa despesa, 
+			DespesaRepository repository) {
+		List<Despesa> despesas = repository.findByDescricaoAndMonth(
+				despesa.getDescricao(), 
+				despesa.getData().getYear(),
+				despesa.getData().getMonthValue()); 
+
+		return !despesas.isEmpty();
 	}
 	
 	public static void printDespesa(Despesa despesa) { 
@@ -35,5 +43,13 @@ public class Utils {
 				", descricao: " + despesa.getDescricao() + 
 				", valor: " + despesa.getValor() + 
 				", data: " + despesa.getData());
+	}
+
+	public static Integer findReceitaIdByDescricaoAndMonth(Receita receita, 
+			ReceitaRepository repository) {
+		return repository.findByDescricaoAndMonth(
+				receita.getDescricao(), 
+				receita.getData().getMonthValue(), 
+				receita.getData().getYear()).getId();
 	}
 }
