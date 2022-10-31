@@ -20,6 +20,8 @@ public interface DespesaRepository extends JpaRepository<Despesa, Integer> {
 					+ "YEAR(d.data) = ?2 AND "
 					+ "MONTH(d.data) = ?3", 
 			nativeQuery = true)
-	public List<Despesa> findByDescricaoAndMonth(String descricao, Integer year,
+	public List<Despesa> findByDescricaoAndMonth(
+			String descricao, 
+			Integer year,
 			Integer month);
 }

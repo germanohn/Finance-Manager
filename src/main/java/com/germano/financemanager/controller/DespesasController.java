@@ -49,7 +49,9 @@ public class DespesasController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<DespesaDto> post(@RequestBody @Valid DespesaForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<DespesaDto> post(
+			@RequestBody @Valid DespesaForm form, 
+			UriComponentsBuilder uriBuilder) {
 		Despesa despesa = form.convert();
 
 		if (!Utils.existsDespesaByDescricaoAndMonth(despesa, despesaRepository)) {
@@ -64,7 +66,9 @@ public class DespesasController {
 	
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<DespesaDto> put(@PathVariable Integer id, @RequestBody @Valid DespesaForm form) {
+	public ResponseEntity<DespesaDto> put(
+			@PathVariable Integer id, 
+			@RequestBody @Valid DespesaForm form) {
 		Despesa despesa = form.update(id, despesaRepository);
 			
 		return ResponseEntity.ok(new DespesaDto(despesa));

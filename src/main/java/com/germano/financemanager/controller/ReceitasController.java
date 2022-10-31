@@ -49,11 +49,13 @@ public class ReceitasController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<ReceitaDto> post(@RequestBody @Valid ReceitaForm form,
+	public ResponseEntity<ReceitaDto> post(
+			@RequestBody @Valid ReceitaForm form,
 			UriComponentsBuilder uriBuilder) {
 		Receita receita = form.convert();
 		
-		if (Utils.findReceitaIdByDescricaoAndMonth(receita, receitaRepository) == null) {
+		if (!Utils.existsReceitaByDescricaoAndMonth(
+				receita, receitaRepository)) {
 			receitaRepository.save(receita); 
 			
 			URI uri = uriBuilder.path("/receitas/{id}").buildAndExpand(receita.getId()).toUri();
@@ -65,7 +67,9 @@ public class ReceitasController {
 	
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<ReceitaDto> put(@PathVariable Integer id, @RequestBody @Valid ReceitaForm form) {
+	public ResponseEntity<ReceitaDto> put(
+			@PathVariable Integer id, 
+			@RequestBody @Valid ReceitaForm form) {
 		Receita receita = form.update(id, receitaRepository);
 			
 		return ResponseEntity.ok(new ReceitaDto(receita));

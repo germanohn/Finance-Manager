@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.germano.financemanager.model.Receita;
 
 public interface ReceitaRepository extends JpaRepository<Receita, Integer> {
+	
 	public Optional<Receita> findById(Integer id);
 	
 	public List<Receita> findByDescricao(String descricao);
@@ -19,6 +20,8 @@ public interface ReceitaRepository extends JpaRepository<Receita, Integer> {
 					+ "YEAR(r.data) = ?2 AND "  
 					+ "MONTH(r.data) = ?3",
 			nativeQuery = true)
-	public Receita findByDescricaoAndMonth(String descricao, Integer year,
+	public List<Receita> findByDescricaoAndMonth(
+			String descricao, 
+			Integer year,
 			Integer month);
 }

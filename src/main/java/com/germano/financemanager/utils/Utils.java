@@ -11,7 +11,8 @@ import com.germano.financemanager.repository.ReceitaRepository;
 public class Utils {
 	
 	public static Optional<Integer> findDespesaIdByDescricaoAndMonth(
-			Despesa despesa, DespesaRepository repository) {
+			Despesa despesa, 
+			DespesaRepository repository) {
 		List<Despesa> despesas = repository.findByDescricaoAndMonth(
 				despesa.getDescricao(), 
 				despesa.getData().getYear(),
@@ -28,7 +29,8 @@ public class Utils {
 		return despesaId;
 	}
 
-	public static boolean existsDespesaByDescricaoAndMonth(Despesa despesa, 
+	public static boolean existsDespesaByDescricaoAndMonth(
+			Despesa despesa, 
 			DespesaRepository repository) {
 		List<Despesa> despesas = repository.findByDescricaoAndMonth(
 				despesa.getDescricao(), 
@@ -45,11 +47,33 @@ public class Utils {
 				", data: " + despesa.getData());
 	}
 
-	public static Integer findReceitaIdByDescricaoAndMonth(Receita receita, 
+	public static Optional<Integer> findReceitaIdByDescricaoAndMonth(
+			Receita receita, 
 			ReceitaRepository repository) {
-		return repository.findByDescricaoAndMonth(
+		List<Receita> receitas = repository.findByDescricaoAndMonth(
 				receita.getDescricao(), 
-				receita.getData().getMonthValue(), 
-				receita.getData().getYear()).getId();
+				receita.getData().getYear(),
+				receita.getData().getMonthValue()); 
+		
+		Optional<Integer> receitaId;
+		
+		if (!receitas.isEmpty()) {
+			receitaId = Optional.of(receitas.get(0).getId());
+		} else {
+			receitaId = Optional.empty();
+		}
+			
+		return receitaId;
+	}
+
+	public static boolean existsReceitaByDescricaoAndMonth(
+			Receita receita,
+			ReceitaRepository repository) {
+		List<Receita> receitas = repository.findByDescricaoAndMonth(
+				receita.getDescricao(), 
+				receita.getData().getYear(),
+				receita.getData().getMonthValue()); 
+
+		return !receitas.isEmpty();
 	}
 }

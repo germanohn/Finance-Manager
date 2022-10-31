@@ -56,19 +56,20 @@ public class DespesaForm {
 	 * the corresponding despesa
 	 * 
 	 * @param id
-	 * @param despesaRepository
+	 * @param repository
 	 * @return  
 	 */
-	public Despesa update(Integer id, DespesaRepository despesaRepository) {
-		Despesa currentDespesaOfId = despesaRepository.findById(id).orElseThrow(
-				EntityNotFoundException::new);
+	public Despesa update(Integer id, DespesaRepository repository) {
+		Despesa currentDespesaOfId = repository.
+				findById(id).
+				orElseThrow(EntityNotFoundException::new);
 		
 		Despesa newDespesaOfId = this.convert();
 		
 		Optional<Integer> despesaIdWithSameDescricaoAndMonth = 
 				Utils.findDespesaIdByDescricaoAndMonth(
 						newDespesaOfId,
-						despesaRepository); 
+						repository); 
 		
 		if (despesaIdWithSameDescricaoAndMonth.isEmpty() || 
 				despesaIdWithSameDescricaoAndMonth.get() == id) {
@@ -82,35 +83,4 @@ public class DespesaForm {
 		
 		return currentDespesaOfId;
 	}
-	
-	/**
-	 * Update despesa of id {id} with this.convert(). It does not update
-	 * the corresponding despesa
-	 * 
-	 * @param id
-	 * @param despesaRepository
-	 * @return  
-	 */
-	/*
-	public Despesa update(Integer id, DespesaRepository despesaRepository) {
-		Despesa currentDespesaOfId = despesaRepository.findById(id).orElseThrow(
-				EntityNotFoundException::new);
-		
-		Despesa newDespesaOfId = this.convert();
-		
-		int idDespesaWithSameDescricaoAndMonth = Utils.
-				findDespesaByDescricaoAndMonth(newDespesaOfId, despesaRepository);
-				
-		if (idDespesaWithSameDescricaoAndMonth == -1 || 
-				idDespesaWithSameDescricaoAndMonth == id) {
-			currentDespesaOfId.setDescricao(newDespesaOfId.getDescricao());
-			currentDespesaOfId.setValor(newDespesaOfId.getValor());
-			currentDespesaOfId.setData(newDespesaOfId.getData());
-		} else {
-			throw new DataIntegrityViolationException(
-					"there exists another despesa with same descricao and month");
-		}
-		
-		return currentDespesaOfId;
-	}*/
 }

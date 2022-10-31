@@ -1,6 +1,7 @@
 package com.germano.financemanager.controller.form;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
@@ -58,17 +59,21 @@ public class ReceitaForm {
 	 * @param receitaRepository
 	 * @return  
 	 */
-	public Receita update(Integer id, ReceitaRepository receitaRepository) {
-		Receita receita = receitaRepository.findById(id).orElseThrow(
-				EntityNotFoundException::new);
+	public Receita update(Integer id, ReceitaRepository repository) {
+		Receita receita = repository.
+				findById(id).
+				orElseThrow(EntityNotFoundException::new);
 		
 		Receita newReceita = this.convert();
 		
-		Integer receitaIdWithSameDescricaoAndMonth = Utils.
-				findReceitaIdByDescricaoAndMonth(newReceita, receitaRepository);
-				
-		if (receitaIdWithSameDescricaoAndMonth == null || 
-				receitaIdWithSameDescricaoAndMonth == id) {
+		
+		Optional<Integer> receitaIdWithSameDescricaoAndMonth = 
+				Utils.findReceitaIdByDescricaoAndMonth(
+						newReceita, 
+						repository);
+		
+		if (receitaIdWithSameDescricaoAndMonth.isEmpty() || 
+				receitaIdWithSameDescricaoAndMonth.get() == id) {
 			receita.setDescricao(newReceita.getDescricao());
 			receita.setValor(newReceita.getValor());
 			receita.setData(newReceita.getData());
