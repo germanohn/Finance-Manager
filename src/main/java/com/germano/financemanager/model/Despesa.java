@@ -3,6 +3,8 @@
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,20 +20,25 @@ public class Despesa {
 	private String descricao;
 	private float valor;
 	private LocalDate data = LocalDate.now();
+	@Enumerated(EnumType.STRING)
+	private Categoria categoria;
 
 	public Despesa() {
-	}
-	
-	public Despesa(String descricao, float valor) {
-		this();
-		this.descricao = descricao;
-		this.valor = valor;
 	}
 
 	public Despesa(String descricao, Float valor, LocalDate data) {
 		this.descricao = descricao;
 		this.valor = valor;
 		this.data = data;
+		this.categoria = Categoria.OUTRAS;
+	}
+	
+	public Despesa(String descricao, Float valor, LocalDate data, 
+			Categoria categoria) {
+		this.descricao = descricao;
+		this.valor = valor;
+		this.data = data;
+		this.categoria = categoria;
 	}
 
 	public Integer getId() {
@@ -60,5 +67,13 @@ public class Despesa {
 
 	public void setData(LocalDate data) {
 		this.data = data;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 }

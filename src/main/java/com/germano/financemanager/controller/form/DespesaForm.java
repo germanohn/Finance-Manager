@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.germano.financemanager.exceptions.EntityNotFoundException;
+import com.germano.financemanager.model.Categoria;
 import com.germano.financemanager.model.Despesa;
 import com.germano.financemanager.repository.DespesaRepository;
 import com.germano.financemanager.utils.Utils;
@@ -22,6 +23,7 @@ public class DespesaForm {
 	@NotNull
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate data;
+	private Categoria categoria = Categoria.OUTRAS;
 
 	public String getDescricao() {
 		return descricao;
@@ -47,8 +49,17 @@ public class DespesaForm {
 		this.data = data;
 	}	
 	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}	
+	
 	public Despesa convert() {
-		return new Despesa(this.descricao, this.valor, this.data);
+		return new Despesa(this.descricao, this.valor, this.data, 
+				this.categoria);
 	}
 	
 	/**
@@ -60,27 +71,28 @@ public class DespesaForm {
 	 * @return  
 	 */
 	public Despesa update(Integer id, DespesaRepository repository) {
-		Despesa currentDespesaOfId = repository.
+		Despesa despesa = repository.
 				findById(id).
 				orElseThrow(EntityNotFoundException::new);
 		
-		Despesa newDespesaOfId = this.convert();
+		Despesa newDespesa = this.convert();
 		
 		Optional<Integer> despesaIdWithSameDescricaoAndMonth = 
 				Utils.findDespesaIdByDescricaoAndMonth(
-						newDespesaOfId,
+						newDespesa,
 						repository); 
 		
 		if (despesaIdWithSameDescricaoAndMonth.isEmpty() || 
 				despesaIdWithSameDescricaoAndMonth.get() == id) {
-			currentDespesaOfId.setDescricao(newDespesaOfId.getDescricao());
-			currentDespesaOfId.setValor(newDespesaOfId.getValor());
-			currentDespesaOfId.setData(newDespesaOfId.getData());
+			despesa.setDescricao(newDespesa.getDescricao());
+			despesa.setValor(newDespesa.getValor());
+			despesa.setData(newDespesa.getData());
+			despesa.setCategoria(newDespesa.getCategoria());
 		} else {
 			throw new DataIntegrityViolationException(
 					"there exists another despesa with same descricao and month");
 		}
 		
-		return currentDespesaOfId;
+		return despesa;
 	}
 }
