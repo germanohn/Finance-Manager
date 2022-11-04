@@ -8,22 +8,16 @@ import com.germano.financemanager.model.Receita;
 
 public class ReceitaDto {
 
-	private int id;
 	private String descricao;
 	private float valor;
 	private LocalDate data = LocalDate.now();
 	
 	public ReceitaDto(Receita receita) {
-		this.id = receita.getId();
 		this.descricao = receita.getDescricao();
 		this.valor = receita.getValor();
 		this.data = receita.getData();
 	}
 	
-	public int getId() {
-		return id;
-	}
-
 	public String getDescricao() {
 		return descricao;
 	}

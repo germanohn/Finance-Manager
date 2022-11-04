@@ -56,6 +56,16 @@ public class ReceitasController {
 		return ResponseEntity.ok(new ReceitaDto(receita));
 	}
 	
+	@GetMapping("/{year}/{month}")
+	public ResponseEntity<List<ReceitaDto>> findByMonth(
+			@PathVariable Integer year, 
+			@PathVariable Integer month) {
+		
+		List<Receita> receitas = receitaRepository.findByMonth(year, month);
+		
+		return ResponseEntity.ok(ReceitaDto.convert(receitas));
+	}
+	
 	@PostMapping
 	@Transactional
 	public ResponseEntity<ReceitaDto> post(

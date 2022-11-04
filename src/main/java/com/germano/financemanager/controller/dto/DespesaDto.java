@@ -9,22 +9,16 @@ import com.germano.financemanager.model.Despesa;
 
 public class DespesaDto {
 
-	private int id;
 	private String descricao;
 	private float valor;
 	private LocalDate data = LocalDate.now();
 	private Categoria categoria;
 	
 	public DespesaDto(Despesa despesa) {
-		this.id = despesa.getId();
 		this.descricao = despesa.getDescricao();
 		this.valor = despesa.getValor();
 		this.data = despesa.getData();
 		this.categoria = despesa.getCategoria();
-	}
-	
-	public int getId() {
-		return id;
 	}
 
 	public String getDescricao() {

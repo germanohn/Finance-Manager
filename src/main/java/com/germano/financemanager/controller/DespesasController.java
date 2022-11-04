@@ -56,6 +56,16 @@ public class DespesasController {
 		return ResponseEntity.ok(new DespesaDto(despesa));
 	}
 	
+	@GetMapping("/{year}/{month}")
+	public ResponseEntity<List<DespesaDto>> findByMonth(
+			@PathVariable Integer year, 
+			@PathVariable Integer month) {
+		
+		List<Despesa> despesas = despesaRepository.findByMonth(year, month);
+		
+		return ResponseEntity.ok(DespesaDto.convert(despesas));
+	}
+	
 	@PostMapping
 	@Transactional
 	public ResponseEntity<DespesaDto> post(
