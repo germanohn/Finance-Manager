@@ -44,6 +44,7 @@ public class DespesasController {
 		} else {
 			despesas = despesaRepository.findByDescricao(descricao);
 		}
+		
 		return DespesaDto.convert(despesas);
 	}
 	

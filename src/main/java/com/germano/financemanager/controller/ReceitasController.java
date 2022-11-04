@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -34,8 +35,16 @@ public class ReceitasController {
 	private ReceitaRepository receitaRepository;
 	
 	@GetMapping
-	public List<ReceitaDto> findAll() {
-		List<Receita> receitas = receitaRepository.findAll();
+	public List<ReceitaDto> findAll(
+			@RequestParam(required = false) String descricao) {
+		
+		List<Receita> receitas;
+		if (descricao == null || descricao.isBlank()) {
+			receitas = receitaRepository.findAll();
+		} else {
+			receitas = receitaRepository.findByDescricao(descricao);
+		}
+		
 		return ReceitaDto.convert(receitas);
 	}
 	
