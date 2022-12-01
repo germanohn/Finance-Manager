@@ -2,15 +2,15 @@ package com.germano.financemanager.controller.dto;
 
 import com.germano.financemanager.model.Categoria;
 
-public class ExpensesByCategoriaAndMonth {
+public class DespesasByCategoriaAndMonth {
 
 	private Categoria categoria;
 	private Float total;
 	
-	public ExpensesByCategoriaAndMonth() {
+	public DespesasByCategoriaAndMonth() {
 	}
 
-	public ExpensesByCategoriaAndMonth(Categoria categoria, Float total) {
+	public DespesasByCategoriaAndMonth(Categoria categoria, Float total) {
 		this.categoria = categoria;
 		this.total = total;
 	}

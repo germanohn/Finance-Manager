@@ -6,14 +6,14 @@ public class ResumoDto {
 	Float totalReceitas;
 	Float totalDespesas;
 	Float finalBalance;
-	List<ExpensesByCategoriaAndMonth> expenses;
+	List<DespesasByCategoriaAndMonth> expenses;
 
 	public ResumoDto() {
 	}
 
 	public ResumoDto(Float totalReceitas, Float totalDespesas, 
 			Float finalBalance,
-			List<ExpensesByCategoriaAndMonth> expenses) {
+			List<DespesasByCategoriaAndMonth> expenses) {
 		this.totalReceitas = totalReceitas;
 		this.totalDespesas = totalDespesas;
 		this.finalBalance = finalBalance;
@@ -32,7 +32,7 @@ public class ResumoDto {
 		return finalBalance;
 	}
 
-	public List<ExpensesByCategoriaAndMonth> getExpenses() {
+	public List<DespesasByCategoriaAndMonth> getExpenses() {
 		return expenses;
 	}
 }
