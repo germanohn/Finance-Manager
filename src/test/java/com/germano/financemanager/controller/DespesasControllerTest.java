@@ -2,12 +2,14 @@ package com.germano.financemanager.controller;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.net.URI;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import com.germano.financemanager.model.Despesa;
 import com.germano.financemanager.repository.DespesaRepository;
 
 @TestPropertySource("/application-test.properties")
@@ -32,7 +35,7 @@ public class DespesasControllerTest {
 	@Autowired
 	private DespesaRepository repository;
 	
-	@DisplayName("Test number of despesas in the db")
+	@DisplayName("Test if it gets the right number of despesas in the db")
 	@Test
 	public void findAll() throws Exception {
 		
@@ -45,7 +48,8 @@ public class DespesasControllerTest {
 
 	}
 	
-	@DisplayName("Test the content of each despesa in the db")
+	@DisplayName("Test if it gets the right the content of each despesa in "
+			+ "the db")
 	@Test
 	public void findById() throws Exception {
 		
@@ -73,4 +77,24 @@ public class DespesasControllerTest {
 				.andExpect(jsonPath("$.data", is("2022-09-05")))
 				.andExpect(jsonPath("$.categoria", is("ALIMENTACAO")));
 	}
+	
+	@DisplayName("Test the search of an invalid")
+	@Test
+	public void findByIdInvalidId() throws Exception {
+		
+		Optional<Despesa> despesa = repository.findById(0);
+		
+		assertFalse(despesa.isPresent());
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/despesas/{id}", 0))
+				.andExpect(status().is4xxClientError())
+				.andExpect(jsonPath("$.status", is("NOT_FOUND")))
+				.andExpect(jsonPath("$.message", is("Despesa was not found")));
+		
+	}
+	
+	
+	
+	
+	
 }

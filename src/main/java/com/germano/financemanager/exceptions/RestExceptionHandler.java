@@ -42,7 +42,7 @@ public class RestExceptionHandler {
 				HttpStatus.CONFLICT
 		);
 		
-		return new ResponseEntity<>(error.getMessage(), error.getStatus());
+		return new ResponseEntity<>(error, error.getStatus());
 	}
 	
 	@ExceptionHandler(EntityNotFoundException.class)
@@ -54,6 +54,6 @@ public class RestExceptionHandler {
 				HttpStatus.NOT_FOUND
 		);
 		
-		return new ResponseEntity<>(error.getMessage(), error.getStatus());
+		return new ResponseEntity<>(error, error.getStatus());
 	}
 }

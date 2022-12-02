@@ -35,7 +35,7 @@ public class DespesasService {
 
 	public ResponseEntity<DespesaDto> findById(Integer id) {
 		Despesa despesa = despesaRepository.findById(id).
-				orElseThrow(() -> new EntityNotFoundException());
+				orElseThrow(() -> new EntityNotFoundException("Despesa was not found"));
 		
 		return ResponseEntity.ok(new DespesaDto(despesa));
 	}

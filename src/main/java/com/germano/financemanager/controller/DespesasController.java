@@ -20,58 +20,53 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.germano.financemanager.controller.dto.DespesaDto;
 import com.germano.financemanager.controller.form.DespesaForm;
+import com.germano.financemanager.exceptions.EntityNotFoundException;
 import com.germano.financemanager.service.DespesasService;
 
 @RestController
 @RequestMapping("/despesas")
 public class DespesasController {
-	
+
 	@Autowired
 	private DespesasService service;
-	
+
 	@GetMapping
-	public List<DespesaDto> findAll(
-			@RequestParam(required = false) String descricao) {
-		
+	public List<DespesaDto> findAll(@RequestParam(required = false) String descricao) {
+
 		return service.findAll(descricao);
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<DespesaDto> findById(@PathVariable Integer id) {
-		
+	public ResponseEntity<DespesaDto> findById(@PathVariable Integer id) throws 
+		EntityNotFoundException {
+
 		return service.findById(id);
 	}
-	
+
 	@GetMapping("/{year}/{month}")
-	public ResponseEntity<List<DespesaDto>> findByMonth(
-			@PathVariable Integer year, 
-			@PathVariable Integer month) {
-		
+	public ResponseEntity<List<DespesaDto>> findByMonth(@PathVariable Integer year, @PathVariable Integer month) {
+
 		return service.findByMonth(year, month);
 	}
-	
+
 	@PostMapping
 	@Transactional
-	public ResponseEntity<DespesaDto> post(
-			@RequestBody @Valid DespesaForm form,
-			UriComponentsBuilder uriBuilder) {
-		
+	public ResponseEntity<DespesaDto> post(@RequestBody @Valid DespesaForm form, UriComponentsBuilder uriBuilder) {
+
 		return service.save(form, uriBuilder);
 	}
-	
+
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<DespesaDto> put(
-			@PathVariable Integer id, 
-			@RequestBody @Valid DespesaForm form) {
-		
+	public ResponseEntity<DespesaDto> put(@PathVariable Integer id, @RequestBody @Valid DespesaForm form) {
+
 		return service.update(id, form);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@Transactional
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
-		
+
 		return service.delete(id);
 	}
 }
