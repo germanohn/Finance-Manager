@@ -1,5 +1,7 @@
 package com.germano.financemanager.controller;
 
+import java.time.Month;
+import java.time.Year;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -44,8 +46,8 @@ public class ReceitasController {
 
 	@GetMapping("/{year}/{month}")
 	public ResponseEntity<List<ReceitaDto>> findByMonth(
-			@PathVariable Integer year, 
-			@PathVariable Integer month) {
+			@PathVariable @Valid Year year, 
+			@PathVariable @Valid Month month) {
 		
 		return service.findByMonth(year, month);
 	}

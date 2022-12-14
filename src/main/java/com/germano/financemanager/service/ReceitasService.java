@@ -1,6 +1,8 @@
 package com.germano.financemanager.service;
 
 import java.net.URI;
+import java.time.Month;
+import java.time.Year;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +26,8 @@ public class ReceitasService {
 	
 	// TODO: Validate month variable
 	public Float findTotalReceitasByMonth(
-			Integer year, 
-			Integer month,
+			Year year, 
+			Month month,
 			ReceitaRepository repository) {
 		
 		List<Receita> receitas = repository.findByMonth(year, month);
@@ -55,8 +57,9 @@ public class ReceitasService {
 		return ResponseEntity.ok(new ReceitaDto(receita));
 	}
 	
-	public ResponseEntity<List<ReceitaDto>> findByMonth(Integer year, 
-			Integer month) {
+	public ResponseEntity<List<ReceitaDto>> findByMonth(
+			Year year, 
+			Month month) {
 		List<Receita> receitas = receitaRepository.findByMonth(year, month);
 		
 		return ResponseEntity.ok(ReceitaDto.convert(receitas));

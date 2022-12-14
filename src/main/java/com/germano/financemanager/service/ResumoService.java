@@ -1,5 +1,7 @@
 package com.germano.financemanager.service;
 
+import java.time.Month;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +31,9 @@ public class ResumoService {
 	@Autowired 
 	private ReceitasService receitasService;
 
-	public ResponseEntity<ResumoDto> findResumo(Integer year, Integer month) {
+	public ResponseEntity<ResumoDto> findResumo(
+			Year year, 
+			Month month) {
 		Float totalReceitas = receitasService.findTotalReceitasByMonth(
 				year, month, receitaRepository);
 		
@@ -44,13 +48,17 @@ public class ResumoService {
 				finalBalance, despesas));
 	}
 
-	private List<DespesasByCategoriaAndMonth> findDespesas(Integer year, Integer month) {
+	private List<DespesasByCategoriaAndMonth> findDespesas(
+			Year year, 
+			Month month) {
 		List<DespesasByCategoriaAndMonth> despesas = 
 				new ArrayList<DespesasByCategoriaAndMonth>();
 		
 		for (Categoria categoria : Categoria.values()) {
 			List<Despesa> d = despesaRepository.findByCategoriaAndMonth(
-							  categoria.toString(), year, month); 
+							  categoria.toString(), 
+							  year.getValue(), 
+							  month.getValue()); 
 			Float totalDespesas = 0f;
 			for (Despesa despesa : d) {
 				totalDespesas += despesa.getValor();

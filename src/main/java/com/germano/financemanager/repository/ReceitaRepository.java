@@ -1,5 +1,7 @@
 package com.germano.financemanager.repository;
 
+import java.time.Month;
+import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +21,7 @@ public interface ReceitaRepository extends JpaRepository<Receita, Integer> {
 					+ "YEAR(r.data) = ?1 AND "  
 					+ "MONTH(r.data) = ?2",
 			nativeQuery = true)
-	public List<Receita> findByMonth(Integer year, Integer month);
+	public List<Receita> findByMonth(Year year, Month month);
 	
 	@Query(
 			value = "SELECT * FROM receitas r WHERE " 

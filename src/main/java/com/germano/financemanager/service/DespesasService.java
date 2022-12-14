@@ -1,12 +1,17 @@
 package com.germano.financemanager.service;
 
 import java.net.URI;
+import java.time.Month;
+import java.time.Year;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.germano.financemanager.controller.dto.DespesaDto;
@@ -40,20 +45,23 @@ public class DespesasService {
 		return ResponseEntity.ok(new DespesaDto(despesa));
 	}
 
-	public ResponseEntity<List<DespesaDto>> findByMonth(Integer year, 
-			Integer month) {
+	public ResponseEntity<List<DespesaDto>> findByMonth(
+			Year year, 
+			Month month) {
 
-		List<Despesa> despesas = despesaRepository.findByMonth(year, month);
+		List<Despesa> despesas = despesaRepository.
+				findByMonth(year.getValue(), month.getValue());
 		
 		return ResponseEntity.ok(DespesaDto.convert(despesas));
 	}
 	
 	public Float findTotalDespesasByMonth(			
-			Integer year, 
-			Integer month,
+			Year year, 
+			Month month,
 			DespesaRepository repository) {
 		
-		List<Despesa> despesas = repository.findByMonth(year, month);
+		List<Despesa> despesas = repository.
+				findByMonth(year.getValue(), month.getValue());
 		
 		Float totalDespesas = despesas.stream()
 				.map(r -> r.getValor())

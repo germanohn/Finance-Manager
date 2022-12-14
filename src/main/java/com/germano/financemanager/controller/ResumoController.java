@@ -1,5 +1,10 @@
 package com.germano.financemanager.controller;
 
+import java.time.Month;
+import java.time.Year;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +22,8 @@ public class ResumoController {
 	
 	@GetMapping("/resumo/{ano}/{mes}")
 	public ResponseEntity<ResumoDto> findResumo(
-			@PathVariable(name = "ano") Integer year, 
-			@PathVariable(name = "mes") Integer month) {
+			@PathVariable(name = "ano") @Valid Year year, 
+			@PathVariable(name = "mes") @Valid Month month) {
 		
 		return service.findResumo(year, month);
 	}

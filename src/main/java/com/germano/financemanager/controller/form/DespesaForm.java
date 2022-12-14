@@ -24,6 +24,20 @@ public class DespesaForm {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate data;
 	private Categoria categoria = Categoria.OUTRAS;
+	
+	public DespesaForm(
+			@NotNull String descricao, 
+			@NotNull Float valor, 
+			@NotNull LocalDate data, 
+			Categoria categoria) {
+		this.descricao = descricao;
+		this.valor = valor;
+		this.data = data;
+		if (categoria == null)
+			this.categoria = Categoria.OUTRAS;
+		else 
+			this.categoria = categoria;
+	}
 
 	public String getDescricao() {
 		return descricao;
@@ -54,7 +68,10 @@ public class DespesaForm {
 	}
 
 	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
+		if (categoria == null)
+			this.categoria = Categoria.OUTRAS;
+		else 
+			this.categoria = categoria;
 	}	
 	
 	public Despesa convert() {
