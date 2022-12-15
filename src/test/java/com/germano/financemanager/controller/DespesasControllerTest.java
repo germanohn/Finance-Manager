@@ -482,4 +482,137 @@ public class DespesasControllerTest {
 				
 	}
 	
+	
+	@DisplayName("PUT: Should be able to update with same despesa")
+	@Test
+	public void ShouldBeAbleToUpdateWithSameDespesa() throws Exception {
+		
+		String jsonString = "{"
+				+ " \"descricao\" : \"rapadura\", \n"
+				+ " \"valor\" : 1, \n"
+				+ " \"data\" : \"2022-09-05\", \n"
+				+ " \"categoria\" : \"ALIMENTACAO\" "
+				+ "}";
+		
+		mockMvc.perform(
+				MockMvcRequestBuilders
+					.put("/despesas/{id}", 2)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(jsonString))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().is2xxSuccessful())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.descricao", is("rapadura")))
+				.andExpect(jsonPath("$.valor", is(1.0)))
+				.andExpect(jsonPath("$.data", is("2022-09-05")))
+				.andExpect(jsonPath("$.categoria", is("ALIMENTACAO")));
+		
+	}
+	
+	@DisplayName("PUT: Should be able to update despesa so that there are"
+			+ "duplicates in the Db")
+	@Test
+	public void ShouldNotBeAbleToUpdateDespesaSoThatThereAreDuplicatesInTheDb() 
+			throws Exception {
+		
+		String jsonString = "{"
+				+ " \"descricao\" : \"rapadura\", \n"
+				+ " \"valor\" : 1, \n"
+				+ " \"data\" : \"2022-09-05\", \n"
+				+ " \"categoria\" : \"ALIMENTACAO\" "
+				+ "}";
+		
+		mockMvc.perform(
+				MockMvcRequestBuilders
+					.put("/despesas/{id}", 3)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(jsonString))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isConflict())
+				.andExpect(jsonPath("$.message", is("there exists another "
+						+ "despesa with same descricao and month")))
+				.andExpect(jsonPath("$.status", is("CONFLICT")));
+		
+	}
+	
+	@DisplayName("PUT: Should update despesa with descricao and month"
+			+ "new in the db")
+	@Test
+	public void ShouldUpdateDespesaWithDescricaoAndMonthNewInTheDb() 
+			throws Exception {
+		
+		String jsonString = "{"
+				+ " \"descricao\" : \"parmegiana\", \n"
+				+ " \"valor\" : 110, \n"
+				+ " \"data\" : \"2022-11-15\", \n"
+				+ " \"categoria\" : \"ALIMENTACAO\" "
+				+ "}";
+		
+		mockMvc.perform(
+				MockMvcRequestBuilders
+					.put("/despesas/{id}", 2)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(jsonString))
+				.andExpect(status().is2xxSuccessful())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.descricao", is("parmegiana")))
+				.andExpect(jsonPath("$.valor", is(110.0)))
+				.andExpect(jsonPath("$.data", is("2022-11-15")))
+				.andExpect(jsonPath("$.categoria", is("ALIMENTACAO")));
+		
+	}
+	
+	@DisplayName("PUT: Should update despesa with same descricao of another"
+			+ "but distinct month")
+	@Test
+	public void ShouldUpdateDespesaWithSameDescricaoOfAnotherButDistinctMonth() 
+			throws Exception {
+		
+		String jsonString = "{"
+				+ " \"descricao\" : \"rapadura\", \n"
+				+ " \"valor\" : 110, \n"
+				+ " \"data\" : \"2022-11-15\", \n"
+				+ " \"categoria\" : \"ALIMENTACAO\" "
+				+ "}";
+		
+		mockMvc.perform(
+				MockMvcRequestBuilders
+					.put("/despesas/{id}", 3)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(jsonString))
+				.andExpect(status().is2xxSuccessful())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.descricao", is("rapadura")))
+				.andExpect(jsonPath("$.valor", is(110.0)))
+				.andExpect(jsonPath("$.data", is("2022-11-15")))
+				.andExpect(jsonPath("$.categoria", is("ALIMENTACAO")));
+		
+	}
+	
+	@DisplayName("PUT: Should update despesa with same month of another but"
+			+ "distinct descricao")
+	@Test
+	public void ShouldUpdateDespesaWithSameMonthOfAnotherButDistinctDescricao() 
+			throws Exception {
+		
+		String jsonString = "{"
+				+ " \"descricao\" : \"parmegiana\", \n"
+				+ " \"valor\" : 110, \n"
+				+ " \"data\" : \"2022-09-15\", \n"
+				+ " \"categoria\" : \"ALIMENTACAO\" "
+				+ "}";
+		
+		mockMvc.perform(
+				MockMvcRequestBuilders
+					.put("/despesas/{id}", 3)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(jsonString))
+				.andExpect(status().is2xxSuccessful())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.descricao", is("parmegiana")))
+				.andExpect(jsonPath("$.valor", is(110.0)))
+				.andExpect(jsonPath("$.data", is("2022-09-15")))
+				.andExpect(jsonPath("$.categoria", is("ALIMENTACAO")));
+		
+	}
 }

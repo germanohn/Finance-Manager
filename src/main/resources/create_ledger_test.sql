@@ -12,9 +12,9 @@ CREATE TABLE `despesas` (
 );
 
 INSERT INTO DESPESAS(descricao, valor, data, categoria) VALUES
-	('trakinas', 3.59, '2022-09-05 10:00:00', 'ALIMENTACAO'), 
-    ('rapadura', 1.0, '2022-09-05 10:00:00', 'ALIMENTACAO'),
-    ('rapadura', 5.0, '2023-09-05 10:00:00', 'ALIMENTACAO');
+	('trakinas', 3.59, '2022-09-05', 'ALIMENTACAO'), 
+    ('rapadura', 1.0, '2022-09-05', 'ALIMENTACAO'),
+    ('rapadura', 5.0, '2023-09-05', 'ALIMENTACAO');
 
 
 select * from despesas;
