@@ -94,7 +94,7 @@ public class DespesasService {
 
 	public ResponseEntity<?> delete(Integer id) {
 		if (!despesaRepository.existsById(id)) {
-			throw new EntityNotFoundException();
+			throw new EntityNotFoundException("Despesa not found");
 		}
 		
 		despesaRepository.deleteById(id);

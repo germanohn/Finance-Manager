@@ -615,4 +615,35 @@ public class DespesasControllerTest {
 				.andExpect(jsonPath("$.categoria", is("ALIMENTACAO")));
 		
 	}
+	
+	@DisplayName("DELETE: Should delete despesa")
+	@Test
+	public void ShouldDeleteDespesa() throws Exception {
+	
+		assertTrue(repository.existsById(2));
+		
+		mockMvc.perform(
+				MockMvcRequestBuilders
+					.delete("/despesas/{id}", 2))
+				.andExpect(status().is2xxSuccessful());
+		
+		assertFalse(repository.existsById(2));
+	}
+	
+	@DisplayName("DELETE: Should throw error when trying to delete despesa "
+			+ "that does not exist")
+	@Test
+	public void ShouldThrowErrorWhenTryingToDeleteDespesaThatDoesNotExist()
+			throws Exception {
+	
+		assertFalse(repository.existsById(4));
+		
+		mockMvc.perform(
+				MockMvcRequestBuilders
+					.delete("/despesas/{id}", 4))
+				.andExpect(status().is4xxClientError())
+				.andExpect(jsonPath("$.message", is("Despesa not found")))
+				.andExpect(jsonPath("$.status", is("NOT_FOUND")));
+		
+	}
 }
