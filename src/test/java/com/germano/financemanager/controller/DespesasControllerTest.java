@@ -116,6 +116,24 @@ public class DespesasControllerTest {
 	
 	}
 	
+	@DisplayName("GET: Should find despesa of id 4")
+	@Test
+	public void shouldFindDespesaOfIdFour() throws Exception {
+	
+		// Assert segunda despesa esta no db de testes
+		assertTrue(repository.findById(4).isPresent());
+		
+		// Buscar segunda despesa e checar status, content, e response body
+		mockMvc.perform(MockMvcRequestBuilders.get("/despesas/{id}", 4))
+		.andExpect(status().isOk())
+		.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.descricao", is("plano de saude")))
+		.andExpect(jsonPath("$.valor", is(1000.0)))
+		.andExpect(jsonPath("$.data", is("2022-09-10")))
+		.andExpect(jsonPath("$.categoria", is("SAUDE")));
+	
+	}
+	
 	@DisplayName("GET: Invalid id should not be present and return right"
 			+ " error message")
 	@Test
@@ -177,6 +195,23 @@ public class DespesasControllerTest {
 				
 	}
 	
+	@DisplayName("GET: Should return despesas with descricao plano de saude")
+	@Test
+	public void shouldReturnDespesasWithDescricaoPlanoDeSaude() 
+			throws Exception {
+		
+		mockMvc.perform(
+				MockMvcRequestBuilders.get("/despesas?descricao=plano de saude"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.length()", is(1)))
+				.andExpect(jsonPath("$.[0].descricao", is("plano de saude")))
+				.andExpect(jsonPath("$.[0].valor", is(1000.0)))
+				.andExpect(jsonPath("$.[0].data", is("2022-09-10")))
+				.andExpect(jsonPath("$.[0].categoria", is("SAUDE")));	
+				
+	}
+	
+	
 	@DisplayName("GET: Should have despesas of 2022/09")
 	@Test
 	public void shouldHaveDespesasOfSeptemberOf2022() throws Exception {
@@ -185,7 +220,7 @@ public class DespesasControllerTest {
 				MockMvcRequestBuilders.get("/despesas/{year}/{month}", 
 						Year.of(2022), Month.SEPTEMBER))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.length()", is(2)))
+				.andExpect(jsonPath("$.length()", is(3)))
 				.andExpect(jsonPath("$.[0].descricao", is("trakinas")))
 				.andExpect(jsonPath("$.[0].valor", is(3.59)))
 				.andExpect(jsonPath("$.[0].data", is("2022-09-05")))
@@ -193,7 +228,11 @@ public class DespesasControllerTest {
 				.andExpect(jsonPath("$.[1].descricao", is("rapadura")))
 				.andExpect(jsonPath("$.[1].valor", is(1.0)))
 				.andExpect(jsonPath("$.[1].data", is("2022-09-05")))
-				.andExpect(jsonPath("$.[1].categoria", is("ALIMENTACAO")));
+				.andExpect(jsonPath("$.[1].categoria", is("ALIMENTACAO")))
+				.andExpect(jsonPath("$.[2].descricao", is("plano de saude")))
+				.andExpect(jsonPath("$.[2].valor", is(1000.0)))
+				.andExpect(jsonPath("$.[2].data", is("2022-09-10")))
+				.andExpect(jsonPath("$.[2].categoria", is("SAUDE")));
 		
 	}
 	
@@ -636,14 +675,15 @@ public class DespesasControllerTest {
 	public void ShouldThrowErrorWhenTryingToDeleteDespesaThatDoesNotExist()
 			throws Exception {
 	
-		assertFalse(repository.existsById(4));
+		assertFalse(repository.existsById(5));
 		
 		mockMvc.perform(
 				MockMvcRequestBuilders
-					.delete("/despesas/{id}", 4))
+					.delete("/despesas/{id}", 5))
 				.andExpect(status().is4xxClientError())
 				.andExpect(jsonPath("$.message", is("Despesa not found")))
 				.andExpect(jsonPath("$.status", is("NOT_FOUND")));
 		
 	}
+	
 }

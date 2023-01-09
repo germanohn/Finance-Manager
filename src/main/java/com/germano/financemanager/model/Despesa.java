@@ -1,4 +1,4 @@
-	package com.germano.financemanager.model;
+package com.germano.financemanager.model;
 
 import java.time.LocalDate;
 

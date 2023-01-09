@@ -30,7 +30,8 @@ public class ReceitasService {
 			Month month,
 			ReceitaRepository repository) {
 		
-		List<Receita> receitas = repository.findByMonth(year, month);
+		List<Receita> receitas = repository.findByMonth(
+				year.getValue(), month.getValue());
 		
 		Float totalReceitas = receitas.stream()
 									  .map(r -> r.getValor())
@@ -60,7 +61,8 @@ public class ReceitasService {
 	public ResponseEntity<List<ReceitaDto>> findByMonth(
 			Year year, 
 			Month month) {
-		List<Receita> receitas = receitaRepository.findByMonth(year, month);
+		List<Receita> receitas = receitaRepository.findByMonth(
+				year.getValue(), month.getValue());
 		
 		return ResponseEntity.ok(ReceitaDto.convert(receitas));
 	}
